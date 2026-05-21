@@ -2,11 +2,6 @@
 
 import { useMemo, useState } from "react";
 
-type Suggestion = {
-  label: string;
-  value: string;
-};
-
 const keys = [
   "C", "DEL", "%", "/",
   "7", "8", "9", "*",
@@ -17,7 +12,7 @@ const keys = [
 
 const operators = ["+", "-", "*", "/", "%"];
 
-function safeEval(expression: string): number | null {
+function safeEval(expression) {
   if (!expression || /[^0-9+\-*/%.() ]/.test(expression)) {
     return null;
   }
@@ -33,11 +28,11 @@ function safeEval(expression: string): number | null {
   }
 }
 
-function formatResult(value: number): string {
+function formatResult(value) {
   return Number.isInteger(value) ? String(value) : value.toFixed(6).replace(/0+$/, "").replace(/\.$/, "");
 }
 
-function getAssistance(expression: string): string {
+function getAssistance(expression) {
   if (!expression) {
     return "Tip: start with numbers, then use operators for quick math.";
   }
@@ -54,7 +49,7 @@ function getAssistance(expression: string): string {
   return "Assistant: you can use ANS to reuse the last result.";
 }
 
-function getSuggestions(expression: string, result: string): Suggestion[] {
+function getSuggestions(expression, result) {
   if (!expression) {
     return [
       { label: "Try 25*4", value: "25*4" },
@@ -95,11 +90,11 @@ export default function Calculator() {
   const assistance = useMemo(() => getAssistance(expression), [expression]);
   const suggestions = useMemo(() => getSuggestions(expression, result), [expression, result]);
 
-  function appendValue(value: string) {
+  function appendValue(value) {
     setExpression((prev) => prev + value);
   }
 
-  function onKeyPress(key: string) {
+  function onKeyPress(key) {
     if (key === "C") {
       setExpression("");
       setResult("0");
@@ -131,7 +126,7 @@ export default function Calculator() {
     appendValue(key);
   }
 
-  function applySuggestion(suggestion: Suggestion) {
+  function applySuggestion(suggestion) {
     if (operators.includes(suggestion.value[0]) && expression.length > 0) {
       appendValue(suggestion.value);
       return;
